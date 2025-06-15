@@ -164,3 +164,36 @@ HEAD
 2025-06-13 09:59:05,050 - ERROR - Make sure GOOGLE_APPLICATION_CREDENTIALS is set and points to your service account key
 2025-06-13 09:59:05,216 - INFO - Loading real data patterns...
 2025-06-13 09:59:07,724 - INFO - Loaded patterns for 200 products and 38 countries
+2025-06-15 16:06:30,441 - ERROR - Error initializing BigQuery client: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information.
+2025-06-15 16:06:30,442 - ERROR - Make sure GOOGLE_APPLICATION_CREDENTIALS is set and points to your service account key
+2025-06-15 16:07:50,887 - INFO - BigQuery client initialized for project: ecommerce-analytics-462115
+2025-06-15 16:07:51,267 - INFO - Found 1 datasets in project
+2025-06-15 16:07:51,268 - INFO - Loading e-commerce dataset from BigQuery table: ecommerce-analytics-462115.ecommerce_data.historical_orders
+2025-06-15 16:07:51,268 - INFO - Executing BigQuery query...
+2025-06-15 16:08:14,175 - INFO - Dataset loaded from BigQuery: 397,884 clean transactions
+2025-06-15 16:08:14,176 - INFO - Date range: 2010-12-01 08:26:00+00:00 to 2011-12-09 12:50:00+00:00
+2025-06-15 16:08:14,176 - INFO - Total revenue: £8,911,407.90
+2025-06-15 16:08:14,184 - INFO - Processing metrics for 2011-12-09
+2025-06-15 16:08:14,211 - INFO - Daily metrics processed: 617 orders, £184349.28
+2025-06-15 16:08:14,211 - INFO - Running advanced analytics in BigQuery...
+2025-06-15 16:08:14,211 - INFO - Executing daily trends query...
+2025-06-15 16:08:14,785 - INFO - Executing customer segmentation query...
+2025-06-15 16:08:15,807 - INFO - Executing product performance query...
+2025-06-15 16:08:16,399 - INFO - Advanced BigQuery analytics completed successfully
+2025-06-15 16:08:16,399 - INFO - ✅ Processed 7 days of trends
+2025-06-15 16:08:16,399 - INFO - ✅ Identified 4 customer segments
+2025-06-15 16:08:16,399 - INFO - ✅ Analyzed 10 top products
+2025-06-15 16:08:16,399 - INFO - 📊 Latest day revenue: £184,349.28 from 617 orders
+2025-06-15 16:08:16,399 - INFO - 👑 VIP customers: 903 (avg £7,442.34)
+2025-06-15 16:08:19,597 - INFO - Metrics saved to BigQuery table: ecommerce_data.processed_metrics
+2025-06-15 16:15:20,135 - WARNING - ⚠️ ML API not available: HTTPConnectionPool(host='localhost', port=5001): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x140b86620>: Failed to establish a new connection: [Errno 61] Connection refused'))
+2025-06-15 16:15:20,135 - INFO - Batch processing will continue without ML predictions
+2025-06-15 16:34:14,328 - INFO - BigQuery client initialized for project: ecommerce-analytics-462115
+2025-06-15 16:34:14,721 - INFO - Found 1 datasets in project
+2025-06-15 16:34:14,721 - INFO - Loading e-commerce dataset from BigQuery table: ecommerce-analytics-462115.ecommerce_data.historical_orders
+2025-06-15 16:34:14,721 - INFO - Executing BigQuery query...
+2025-06-15 16:34:15,803 - INFO - Dataset loaded from BigQuery: 1,000 clean transactions
+2025-06-15 16:34:15,803 - INFO - Date range: 2011-12-08 17:12:00+00:00 to 2011-12-09 12:50:00+00:00
+2025-06-15 16:34:15,803 - INFO - Total revenue: £200,955.58
+2025-06-15 16:34:15,915 - INFO - Loading real data patterns...
+2025-06-15 16:34:18,429 - INFO - Loaded patterns for 200 products and 38 countries

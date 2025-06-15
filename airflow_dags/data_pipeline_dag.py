@@ -25,6 +25,65 @@ sys.path.append('/opt/airflow/src')
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(current_dir)
 
+# Little's Law Pipeline Tracking
+pipeline_metrics = {}
+
+def order_arrives(pipeline_id):
+    """Track when an order/pipeline starts - Little's Law Implementation"""
+    pipeline_metrics[pipeline_id] = {
+        'start_time': datetime.now(),
+        'status': 'in_progress',
+        'stage': 'data_generation'
+    }
+    print(f"📊 Little's Law: Pipeline {pipeline_id} started tracking")
+    print(f"📊 Arrival time: {pipeline_metrics[pipeline_id]['start_time']}")
+
+def order_completes(pipeline_id):
+    """Track when an order/pipeline completes - Little's Law Implementation"""
+    if pipeline_id in pipeline_metrics:
+        pipeline_metrics[pipeline_id]['end_time'] = datetime.now()
+        pipeline_metrics[pipeline_id]['status'] = 'completed'
+        
+        # Calculate metrics
+        start_time = pipeline_metrics[pipeline_id]['start_time']
+        end_time = pipeline_metrics[pipeline_id]['end_time']
+        duration = end_time - start_time
+        
+        pipeline_metrics[pipeline_id]['duration_seconds'] = duration.total_seconds()
+        pipeline_metrics[pipeline_id]['duration_minutes'] = duration.total_seconds() / 60
+        
+        print(f"📊 Little's Law: Pipeline {pipeline_id} completed")
+        print(f"📊 Total processing time: {duration}")
+        print(f"📊 Throughput: 1 pipeline per {duration.total_seconds():.2f} seconds")
+    else:
+        print(f"⚠️ Pipeline {pipeline_id} not found in metrics")
+
+def show_metrics():
+    """Show current pipeline metrics - Little's Law Analysis"""
+    if not pipeline_metrics:
+        print("📊 No pipeline metrics available yet")
+        return
+    
+    print("📊 Little's Law Pipeline Analysis:")
+    print("-" * 50)
+    
+    completed_pipelines = [p for p in pipeline_metrics.values() if p.get('status') == 'completed']
+    in_progress_pipelines = [p for p in pipeline_metrics.values() if p.get('status') == 'in_progress']
+    
+    print(f"🔄 Pipelines in progress: {len(in_progress_pipelines)}")
+    print(f"✅ Completed pipelines: {len(completed_pipelines)}")
+    
+    if completed_pipelines:
+        avg_duration = sum(p.get('duration_seconds', 0) for p in completed_pipelines) / len(completed_pipelines)
+        print(f"⏱️ Average processing time: {avg_duration:.2f} seconds")
+        print(f"🚀 Average throughput: {1/avg_duration*60:.2f} pipelines per minute")
+    
+    # Show recent pipeline details
+    for pid, metrics in list(pipeline_metrics.items())[-3:]:  # Show last 3
+        status_icon = "✅" if metrics.get('status') == 'completed' else "🔄"
+        duration_str = f"{metrics.get('duration_seconds', 0):.1f}s" if 'duration_seconds' in metrics else "in progress"
+        print(f"  {status_icon} {pid}: {duration_str}")
+
 # Default arguments for the DAG
 default_args = {
     'owner': 'data-engineering-team',
@@ -44,7 +103,7 @@ dag = DAG(
     schedule_interval='@daily',  # Run daily
     max_active_runs=1,
     catchup=False,
-    tags=['ecommerce', 'analytics', 'ml', 'data-engineering']
+    tags=['ecommerce', 'analytics', 'ml', 'data-engineering', 'littles-law']
 )
 
 def generate_fake_data_task(**context):
