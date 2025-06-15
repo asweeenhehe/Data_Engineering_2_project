@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Metrics - E-commerce Analytics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            color: #718096;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .detailed-metrics {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #4a5568;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .top-performers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .performer-section {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .performer-section h4 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .performer-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .performer-item:last-child {
+            border-bottom: none;
+        }
+
+        .performer-name {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .performer-value {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .error-message {
+            background: rgba(245, 101, 101, 0.1);
+            border: 1px solid #fed7d7;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            color: #742a2a;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .timestamp {
+            text-align: center;
+            color: #718096;
+            margin-top: 20px;
+            font-style: italic;
+        }
+
+        .no-data {
+            text-align: center;
+            color: #718096;
+            padding: 40px;
+            background: #f7fafc;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/" class="nav-btn">← Back to Dashboard</a>
+            <h1>📊 Business Metrics</h1>
+            <p>Real-time analytics and performance insights</p>
+            <button onclick="location.reload()" class="refresh-btn" style="margin-top: 15px;">🔄 Refresh Data</button>
+        </div>
+
+        {% if error %}
+        <div class="error-message">
+            <h3>❌ Unable to Load Metrics</h3>
+            <p>{{ error }}</p>
+            <div style="margin-top: 15px; background: rgba(255,255,255,0.8); padding: 15px; border-radius: 8px;">
+                <strong>💡 Troubleshooting:</strong>
+                <ul style="text-align: left; margin-top: 10px;">
+                    <li>Run batch processing: <code>python src/batch/daily_processor.py</code></li>
+                    <li>Check if processed files exist in <code>data/processed/</code></li>
+                    <li>Ensure you have processed some data first</li>
+                </ul>
+            </div>
+        </div>
+        {% elif not metrics %}
+        <div class="no-data">
+            <h3>📭 No Metrics Available</h3>
+            <p>No processed metrics found. Run the batch processor to generate business metrics.</p>
+            <br>
+            <button onclick="generateSampleData()" class="refresh-btn">🚀 Generate Sample Data</button>
+        </div>
+        {% else %}
+
+        <!-- Key Metrics Cards -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon">💰</div>
+                <div class="metric-value">£{{ "%.2f"|format(metrics.total_revenue) if metrics.total_revenue else '0.00' }}</div>
+                <div class="metric-label">Total Revenue</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon">🛍️</div>
+                <div class="metric-value">{{ metrics.total_orders or '0' }}</div>
+                <div class="metric-label">Total Orders</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon">👥</div>
+                <div class="metric-value">{{ metrics.unique_customers or '0' }}</div>
+                <div class="metric-label">Unique Customers</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon">📦</div>
+                <div class="metric-value">{{ metrics.unique_products or '0' }}</div>
+                <div class="metric-label">Unique Products</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon">💳</div>
+                <div class="metric-value">£{{ "%.2f"|format(metrics.avg_order_value) if metrics.avg_order_value else '0.00' }}</div>
+                <div class="metric-label">Avg Order Value</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon">🌍</div>
+                <div class="metric-value">{{ metrics.countries_served or '0' }}</div>
+                <div class="metric-label">Countries Served</div>
+            </div>
+        </div>
+
+        <!-- Detailed Metrics -->
+        <div class="detailed-metrics">
+            <h3 class="section-title">📈 Performance Details</h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                <div style="background: #f7fafc; padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="color: #667eea; font-size: 1.5em; font-weight: bold;">{{ metrics.total_quantity or '0' }}</div>
+                    <div style="color: #718096;">Total Quantity Sold</div>
+                </div>
+                
+                {% if metrics.peak_hour is defined %}
+                <div style="background: #f7fafc; padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="color: #667eea; font-size: 1.5em; font-weight: bold;">{{ metrics.peak_hour }}:00</div>
+                    <div style="color: #718096;">Peak Sales Hour</div>
+                </div>
+                {% endif %}
+                
+                {% if metrics.peak_hour_revenue %}
+                <div style="background: #f7fafc; padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="color: #667eea; font-size: 1.5em; font-weight: bold;">£{{ "%.2f"|format(metrics.peak_hour_revenue) }}</div>
+                    <div style="color: #718096;">Peak Hour Revenue</div>
+                </div>
+                {% endif %}
+                
+                {% if metrics.date %}
+                <div style="background: #f7fafc; padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="color: #667eea; font-size: 1.5em; font-weight: bold;">{{ metrics.date }}</div>
+                    <div style="color: #718096;">Analysis Date</div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Top Performers -->
+            {% if metrics.top_customers or metrics.top_products or metrics.top_countries %}
+            <h4 class="section-title">🏆 Top Performers</h4>
+            <div class="top-performers">
+                
+                {% if metrics.top_customers %}
+                <div class="performer-section">
+                    <h4>👑 Top Customers</h4>
+                    {% for customer in metrics.top_customers %}
+                    <div class="performer-item">
+                        <span class="performer-name">Customer {{ customer.customer_id }}</span>
+                        <span class="performer-value">£{{ "%.2f"|format(customer.revenue) }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if metrics.top_products %}
+                <div class="performer-section">
+                    <h4>📦 Top Products</h4>
+                    {% for product in metrics.top_products %}
+                    <div class="performer-item">
+                        <span class="performer-name">{{ product.product_code }}</span>
+                        <span class="performer-value">£{{ "%.2f"|format(product.revenue) }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if metrics.top_countries %}
+                <div class="performer-section">
+                    <h4>🌍 Top Countries</h4>
+                    {% for country in metrics.top_countries %}
+                    <div class="performer-item">
+                        <span class="performer-name">{{ country.country }}</span>
+                        <span class="performer-value">£{{ "%.2f"|format(country.revenue) }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="timestamp">
+            📅 Last updated: {{ moment().format('MMMM Do YYYY, h:mm:ss a') if moment else 'Now' }}
+        </div>
+
+        {% endif %}
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="/" class="nav-btn">🏠 Dashboard</a>
+            <a href="/predict" class="nav-btn">🤖 Predictions</a>
+            <a href="/monitoring" class="nav-btn">🖥️ Monitoring</a>
+        </div>
+    </div>
+
+    <script>
+        function generateSampleData() {
+            // Show loading
+            const button = event.target;
+            button.innerHTML = '⏳ Generating...';
+            button.disabled = true;
+
+            // Simulate sample data generation
+            setTimeout(() => {
+                alert('Sample data generation would typically run the batch processor.\n\nTo generate real data, run:\npython src/batch/daily_processor.py');
+                button.innerHTML = '🚀 Generate Sample Data';
+                button.disabled = false;
+            }, 2000);
+        }
+
+        // Auto-refresh every 5 minutes
+        setTimeout(() => {
+            location.reload();
+        }, 300000);
+
+        // Add some dynamic behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate metric cards on load
+            const cards = document.querySelectorAll('.metric-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -17,7 +17,7 @@ def test_basic_functionality():
     print("🧪 Testing Basic Little's Law Functionality")
     print("="*50)
     
-    from simple_littles_law import order_arrives, order_completes, show_metrics
+    from src.simple_littles_law import order_arrives, order_completes, show_metrics
     
     # Test 1: Single order
     print("\n1️⃣ Testing single order...")
@@ -49,7 +49,7 @@ def demo_realistic_scenario():
     print("\n🎬 Realistic E-Commerce Scenario Demo")
     print("="*50)
     
-    from simple_littles_law import tracker
+    from src.simple_littles_law import tracker
     
     # Clear any existing data
     tracker.orders_in_system.clear()
@@ -104,7 +104,7 @@ def test_integration_points():
     
     # Test 1: Can import from existing project structure
     try:
-        from simple_littles_law import LittlesLaw
+        from src.simple_littles_law import LittlesLaw
         print("✅ Can import LittlesLaw class")
     except ImportError as e:
         print(f"❌ Import failed: {e}")
@@ -150,7 +150,7 @@ def quick_demo():
     print("⚡ QUICK LITTLE'S LAW DEMO")
     print("="*30)
     
-    from simple_littles_law import order_arrives, order_completes, show_metrics
+    from src.simple_littles_law import order_arrives, order_completes, show_metrics
     
     # Rapid fire demo
     orders = [f"QUICK_{i:03d}" for i in range(3)]

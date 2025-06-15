@@ -15,7 +15,7 @@ sys.path.append('.')
 sys.path.append(os.getcwd())
 
 # Import Little's Law tracker
-from simple_littles_law import order_arrives, order_completes, show_metrics
+from src.simple_littles_law import order_arrives, order_completes, show_metrics
 
 def simulate_order_processing():
     """Simulate order processing with Little's Law tracking"""

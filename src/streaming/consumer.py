@@ -5,7 +5,7 @@ from google.cloud import pubsub_v1
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from simple_littles_law import order_arrives, order_completes, show_metrics
+from src.simple_littles_law import order_arrives, order_completes, show_metrics
 
 
 # Your project ID
